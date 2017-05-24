@@ -13,6 +13,7 @@
 
 Route::get('/', 'WelcomeController@index');
 
+
 // ユーザ登録
 Route::get('signup', 'Auth\AuthController@getRegister')->name('signup.get');
 Route::post('signup', 'Auth\AuthController@postRegister')->name('signup.post');
@@ -26,5 +27,20 @@ Route::get('logout', 'Auth\AuthController@getLogout')->name('logout.get');
 // まとめて認証を通す
 Route::group(['middleware' => 'auth'], function () {
     Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
+    Route::resource('microposts', 'MicropostsController', ['only' => ['store', 'destroy']]);
+
+    // フォロー／アンフォロー
+    Route::group(['prefix' => 'users/{id}'], function () { 
+        Route::post('follow', 'UserFollowController@store')->name('user.follow');
+        Route::delete('unfollow', 'UserFollowController@destroy')->name('user.unfollow');
+        Route::get('followings', 'UsersController@followings')->name('users.followings');
+        Route::get('followers', 'UsersController@followers')->name('users.followers');
+    });
+});
+
+
+Route::group(['middleware' => 'auth'], function () {
+    Route::resource('users', 'UsersController', ['only' => ['index', 'show']]);
+    
     Route::resource('microposts', 'MicropostsController', ['only' => ['store', 'destroy']]);
 });
