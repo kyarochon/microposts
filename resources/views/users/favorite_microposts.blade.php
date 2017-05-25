@@ -11,7 +11,6 @@
                     <img class="media-object img-rounded img-responsive" src="{{ Gravatar::src($user->email, 500) }}" alt="">
                 </div>
             </div>
-            <!--フォローボタン-->
             @include('user_follow.follow_button', ['user' => $user])
         </aside>
         <div class="col-xs-8">
@@ -21,8 +20,8 @@
                 <li role="presentation" class="{{ Request::is('users/*/followers') ? 'active' : '' }}"><a href="{{ route('users.followers', ['id' => $user->id]) }}">Followers <span class="badge">{{ $count_followers }}</span></a></li>
                 <li role="presentation" class="{{ Request::is('users/*/favorite_microposts') ? 'active' : '' }}"><a href="{{ route('users.favorite_microposts', ['id' => $user->id]) }}">Favorites <span class="badge">{{ $count_favorites }}</span></a></li>
             </ul>
-            @if (count($microposts) > 0)
-                @include('microposts.microposts', ['microposts' => $microposts])
+            @if (count($favorite_microposts) > 0)
+                @include('microposts.microposts', ['microposts' => $favorite_microposts])
             @endif
         </div>
     </div>

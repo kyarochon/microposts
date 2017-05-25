@@ -12,12 +12,25 @@
             <div>
                 <p>{!! nl2br(e($micropost->content)) !!}</p>
             </div>
-            <div>
-                @if (Auth::user()->id == $micropost->user_id)
-                    {!! Form::open(['route' => ['microposts.destroy', $micropost->id], 'method' => 'delete']) !!}
-                        {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']) !!}
-                    {!! Form::close() !!}
-                @endif
+            <div class="btn-toolbar">
+                  <div class="btn-group">
+                    @if (Auth::user()->has_added_favorite($micropost->id))
+                        {!! Form::open(['route' => ['user.remove_favorite', $micropost->id], 'method' => 'delete']) !!}
+                            {!! Form::submit('★', ['class' => "btn btn-success btn-xs"]) !!}
+                        {!! Form::close() !!}
+                    @else
+                        {!! Form::open(['route' => ['user.add_favorite', $micropost->id]]) !!}
+                            {!! Form::submit('☆', ['class' => "btn btn-default btn-xs"]) !!}
+                        {!! Form::close() !!}
+                    @endif
+                </div>
+                <div class="btn-group">
+                    @if (Auth::user()->id == $micropost->user_id)
+                        {!! Form::open(['route' => ['microposts.destroy', $micropost->id], 'method' => 'delete']) !!}
+                            {!! Form::submit('Delete', ['class' => 'btn btn-danger btn-xs']) !!}
+                        {!! Form::close() !!}
+                    @endif
+                </div>
             </div>
         </div>
     </li>
